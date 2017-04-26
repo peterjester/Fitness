@@ -8,7 +8,7 @@
 
 /* Begin PBXFileReference section */
 		8416AB661EA58C03003678EF /* main.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
-		841B01631EA6DF8200595A02 /* fitbitApiitbitCalls.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = fitbitApiitbitCalls.py; sourceTree = "<group>"; };
+		841B01631EA6DF8200595A02 /* fitbitApiCalls.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = fitbitApiCalls.py; sourceTree = "<group>"; };
 		849444591EB14487004078C0 /* tokens.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = tokens.py; sourceTree = "<group>"; };
 		8494445A1EB1452C004078C0 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -19,7 +19,7 @@
 			children = (
 				8494445A1EB1452C004078C0 /* .gitignore */,
 				849444591EB14487004078C0 /* tokens.py */,
-				841B01631EA6DF8200595A02 /* fitbitApiitbitCalls.py */,
+				841B01631EA6DF8200595A02 /* fitbitApiCalls.py */,
 				8416AB661EA58C03003678EF /* main.py */,
 			);
 			sourceTree = "<group>";

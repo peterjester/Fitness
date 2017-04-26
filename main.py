@@ -4,25 +4,7 @@ import json
 import datetime
 
 from tokens import token
-# put the token for your app in between the single quotes
-
-
-'''
-    @brief  - takes in request url
-    @return - prettyprint formated json response as a string
-    @todo   -
-'''
-def fitbitRequestForUrl ( url ) :
-    
-    print 'requesting ' + url
-    response = requests.get(url, headers={'Authorization':'Bearer ' + token})
-    jsonString = response.text
-    
-    # eval ensures our json string is not double encoded
-    formatedJsonResponse = json.dumps(eval(jsonString), indent=4)
-    
-    return formatedJsonResponse
-
+from fitbitApiCalls import *
 
 '''
     @brief - takes in the activities HR request url, prints the most recent HR recorded and time
@@ -64,8 +46,8 @@ sample_url = 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1se
 returnJsonString = parseCurrentHR(test_url)
 print returnJsonString
 
+activityForDate()
 
-#todo - implement a subscriber to know when the heart rate is updated.
 #idea - progress bar for calories burned in a day vs calories eaten in a day or some variation
 
 
