@@ -1,32 +1,73 @@
-import sys
 import time
 import requests
 import json
 import datetime
 
-timeNow = datetime.datetime.now()
+from tokens import token
 
+pretty_print_global = False
+
+def switch_pretty_print():
+    global pretty_print_global
+    pretty_print_global = not pretty_print_global
+    print 'value of pretty print in fitbit ' + str(pretty_print_global)
+    return pretty_print_global
 
 '''
     @brief  - takes in request url
-    @return - prettyprint formated json response as a string
-    @todo   -
+    @return - prettyprint formatted json response as a string
+    @todo   - catch exceptions, does and in if make sense?
 '''
-def fitbitRequestForUrl ( url ) :
-    
+def fitbit_request_for_url(url, pretty=False):
     print 'requesting ' + url
-    response = requests.get(url, headers={'Authorization':'Bearer ' + token})
-    jsonString = response.text
-    
+    response = requests.get(url, headers={'Authorization': 'Bearer ' + token})
+    json_string = response.text
     # eval ensures our json string is not double encoded
-    formatedJsonResponse = json.dumps(eval(jsonString), indent=4)
-    
-    return formatedJsonResponse
+    if pretty_print_global and pretty:
+        return json.dumps(eval(json_string), indent=4)
+
+    return json.loads(json_string)
+
+'''
+    @brief  - returns the current time, and the time minus the parameter 
+              in minutes as a tuple. Default is 300
+    @note   - to access the current time, call "time_now_time_them()[0]"
+    @return - prettyprint formatted json response as a string
+'''
+def time_now_time_then(delta=300) :
+    time_now = datetime.datetime.now()
+    time_delta = time_now - datetime.timedelta(minutes=delta)
+    #time span for which we would like to query the API
+    time_str = time_now.strftime("%H:%M:%S")
+    time_delta_str = time_delta.strftime("%H:%M:%S")
+    return time_str, time_delta_str
+
+'''
+    @brief  - returns the activity json object for the given date. default is today
+'''
+def activity(date=datetime.datetime.now()):
+    date = date.strftime("%Y-%m-%d")
+    url = "https://api.fitbit.com/1/user/-/activities/date/" + date + ".json"
+    return fitbit_request_for_url(url)
+
+'''
+    @brief  - returns the number of calories output for the current day
+'''
+def calories_output():
+    return activity()["summary"]["caloriesOut"]
+
+'''
+    @brief  - returns the number of calories output for the current day
+'''
+def calories_goal():
+    return activity()["goals"]["caloriesOut"]
 
 
-def activityForDate() :
-    print timeNow
-    time.sleep(30)
-    print timeNow
-    url = 'https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json'
-
+'''
+    @brief  - returns the number of calories output for the current day
+'''
+def current_HR():
+    url = 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1sec.json'
+    data = fitbit_request_for_url(url, False)["activities-heart-intraday"]["dataset"]
+    return data.pop()["value"], data.pop()["time"]
+    # return data.pop()["value"]["time"]
