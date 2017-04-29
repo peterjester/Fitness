@@ -5,28 +5,28 @@ import datetime
 
 from tokens import token
 
-pretty_print_global = False
+#todo - make fitbit class with different objects i.e. activity, food, hr, etc
 
+'''
+    @brief - global value for whether or not you would like the json strings
+                return in pretty print
+'''
+pretty_print_global = False
 def switch_pretty_print():
     global pretty_print_global
     pretty_print_global = not pretty_print_global
-    print 'value of pretty print in fitbit ' + str(pretty_print_global)
     return pretty_print_global
 
 '''
     @brief  - takes in request url
-    @return - prettyprint formatted json response as a string
-    @todo   - catch exceptions, does and in if make sense?
+    @return - json object response 
+    @todo   - catch exceptions
 '''
 def fitbit_request_for_url(url, pretty=False):
     print 'requesting ' + url
     response = requests.get(url, headers={'Authorization': 'Bearer ' + token})
-    json_string = response.text
-    # eval ensures our json string is not double encoded
-    if pretty_print_global and pretty:
-        return json.dumps(eval(json_string), indent=4)
-
-    return json.loads(json_string)
+    json_response = response.json()
+    return json_response
 
 '''
     @brief  - returns the current time, and the time minus the parameter 
@@ -50,6 +50,8 @@ def activity(date=datetime.datetime.now()):
     url = "https://api.fitbit.com/1/user/-/activities/date/" + date + ".json"
     return fitbit_request_for_url(url)
 
+
+
 '''
     @brief  - returns the number of calories output for the current day
 '''
@@ -70,4 +72,3 @@ def current_HR():
     url = 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1sec.json'
     data = fitbit_request_for_url(url, False)["activities-heart-intraday"]["dataset"]
     return data.pop()["value"], data.pop()["time"]
-    # return data.pop()["value"]["time"]
