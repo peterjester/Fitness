@@ -2,6 +2,7 @@ import time
 import requests
 import json
 import datetime
+import sys
 
 from tokens import token
 
@@ -23,9 +24,15 @@ def switch_pretty_print():
     @todo   - catch exceptions
 '''
 def fitbit_request_for_url(url, pretty=False):
+    response = requests.get(url, headers={'Authorization': 'Bearer ' + token,
+                                          'Accept-Language': 'en_US'})
     print 'requesting ' + url
-    response = requests.get(url, headers={'Authorization': 'Bearer ' + token})
+    print "requests reminaing " + response.headers["Fitbit-Rate-Limit-Remaining"]
     json_response = response.json()
+    if json_response["errors"]:
+        reset_time = str(datetime.timedelta(seconds=int(response.headers["Fitbit-Rate-Limit-Reset"])))
+        print "time limit resets " + reset_time + " seconds"
+        sys.exit("Received an error")
     return json_response
 
 '''
@@ -50,8 +57,6 @@ def activity(date=datetime.datetime.now()):
     url = "https://api.fitbit.com/1/user/-/activities/date/" + date + ".json"
     return fitbit_request_for_url(url)
 
-
-
 '''
     @brief  - returns the number of calories output for the current day
 '''
@@ -63,6 +68,20 @@ def calories_output():
 '''
 def calories_goal():
     return activity()["goals"]["caloriesOut"]
+
+'''
+    @brief  - returns the weight json object for the given date. default is today
+'''
+def weight(date=datetime.datetime.now()):
+    date = date.strftime("%Y-%m-%d")
+    url = 'https://api.fitbit.com/1/user/-/body/log/weight/date/' + date + '.json'
+    return fitbit_request_for_url(url)
+
+'''
+    @brief  - returns most recent weight
+'''
+def current_weight():
+    return weight()["weight"].pop()["weight"]
 
 
 '''
