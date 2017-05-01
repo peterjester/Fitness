@@ -29,7 +29,7 @@ def fitbit_request_for_url(url, pretty=False):
     print 'requesting ' + url
     print "requests reminaing " + response.headers["Fitbit-Rate-Limit-Remaining"]
     json_response = response.json()
-    if json_response["errors"]:
+    if "errors" in json_response:
         reset_time = str(datetime.timedelta(seconds=int(response.headers["Fitbit-Rate-Limit-Reset"])))
         print "time limit resets " + reset_time + " seconds"
         sys.exit("Received an error")
@@ -75,12 +75,14 @@ def calories_goal():
 def weight(date=datetime.datetime.now()):
     date = date.strftime("%Y-%m-%d")
     url = 'https://api.fitbit.com/1/user/-/body/log/weight/date/' + date + '.json'
+    url = 'https://api.fitbit.com/1/user/-/body/log/weight/date/' + date + '/1w.json'
     return fitbit_request_for_url(url)
 
 '''
     @brief  - returns most recent weight
 '''
 def current_weight():
+    print weight()
     return weight()["weight"].pop()["weight"]
 
 
