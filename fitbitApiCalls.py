@@ -57,17 +57,9 @@ def activity(date=datetime.datetime.now()):
     url = "https://api.fitbit.com/1/user/-/activities/date/" + date + ".json"
     return fitbit_request_for_url(url)
 
-'''
-    @brief  - returns the number of calories output for the current day
-'''
-def calories_output():
-    return activity()["summary"]["caloriesOut"]
 
-'''
-    @brief  - returns the number of calories output for the current day
-'''
-def calories_goal():
-    return activity()["goals"]["caloriesOut"]
+
+
 
 '''
     @brief  - returns the weight json object for the given date. default is today
