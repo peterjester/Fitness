@@ -78,10 +78,5 @@ def current_weight():
     return weight()["weight"].pop()["weight"]
 
 
-'''
-    @brief  - returns the number of calories output for the current day
-'''
-def current_HR():
-    url = 'https://api.fitbit.com/1/user/-/activities/heart/date/today/1d/1sec.json'
-    data = fitbit_request_for_url(url, False)["activities-heart-intraday"]["dataset"]
-    return data.pop()["value"], data.pop()["time"]
+
+
